@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fff0f6;
+  --foreground: #4a2545;
 }
 
 @theme inline {
@@ -14,13 +14,377 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #fff0f6;
+    --foreground: #4a2545;
   }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins), var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+::selection {
+  background: rgba(219, 39, 119, 0.18);
+}
+
+.birthday-shell {
+  isolation: isolate;
+}
+
+.handwritten-text {
+  font-family: var(--font-caveat), "Poppins", cursive;
+  font-weight: 700;
+}
+
+.mobile-readable-text {
+  text-wrap: balance;
+}
+
+.panel-bubble {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 182, 214, 0.38) 55%, rgba(236, 180, 255, 0.12) 100%);
+  box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.45), 0 8px 20px rgba(219, 39, 119, 0.05);
+  animation: bubble-drift ease-in-out infinite;
+  filter: blur(0.2px);
+}
+
+.cta-button {
+  transform-origin: center;
+}
+
+.cta-button:hover {
+  animation: cta-bounce 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.text-pop-halo {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: rgba(244, 114, 182, 0.22);
+  transform: translate(-50%, -50%);
+  animation: text-pop 420ms ease-out forwards;
+  pointer-events: none;
+}
+
+.typing-cursor {
+  animation: typing-cursor-blink 1s steps(1, end) infinite;
+}
+
+@media (max-width: 640px) {
+  .mobile-readable-text {
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.012em;
+    line-height: 1.7;
+  }
+}
+
+.slide-panel-enter {
+  animation: slide-panel-enter 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: center;
+  transform-style: preserve-3d;
+}
+
+.slide-panel-exit {
+  animation: slide-panel-exit 280ms ease-in both;
+  transform-origin: center;
+  transform-style: preserve-3d;
+}
+
+@keyframes slide-panel-enter {
+  from {
+    opacity: 0;
+    transform: perspective(1200px) translateY(22px) rotateX(10deg) scale(0.965);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes slide-panel-exit {
+  from {
+    opacity: 1;
+    transform: perspective(1200px) translateY(0) rotateX(0deg) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: perspective(1200px) translateY(-14px) rotateX(-8deg) scale(0.985);
+    filter: blur(3px);
+  }
+}
+
+.slide-panel-exit-fade {
+  animation: slide-panel-exit-fade 320ms ease-in both;
+  transform-origin: center;
+}
+
+@keyframes slide-panel-exit-fade {
+  from {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.94);
+    filter: blur(2px);
+  }
+}
+
+/* --- Kupu-kupu latar seluruh layar --- */
+.floating-butterfly {
+  animation-name: butterfly-float, butterfly-flutter;
+  animation-timing-function: ease-in-out, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes butterfly-float {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.85;
+  }
+  30% {
+    transform: translateY(-35vh) translateX(20px) rotate(6deg);
+  }
+  50% {
+    transform: translateY(-60vh) translateX(-15px) rotate(-6deg);
+  }
+  70% {
+    transform: translateY(-85vh) translateX(20px) rotate(6deg);
+  }
+  90% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-115vh) translateX(-10px) rotate(-4deg);
+    opacity: 0;
+  }
+}
+
+@keyframes butterfly-flutter {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.7);
+  }
+}
+
+/* --- Kupu-kupu dekoratif di dalam panel, mengepak di tempat, di belakang teks --- */
+.inner-butterfly {
+  animation-name: inner-hover, butterfly-flutter, butterfly-wobble;
+  animation-timing-function: ease-in-out, ease-in-out;
+  animation-iteration-count: infinite, infinite, infinite;
+  will-change: transform;
+}
+
+@keyframes inner-hover {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(-4deg);
+  }
+  50% {
+    transform: translate(6px, -10px) rotate(4deg);
+  }
+}
+
+/* --- Balon dekoratif di belakang panel --- */
+.floating-balloon {
+  position: absolute;
+  animation-name: balloon-rise, balloon-sway, balloon-wobble;
+  animation-timing-function: linear, ease-in-out, ease-in-out;
+  animation-iteration-count: infinite, infinite, infinite;
+  will-change: transform, opacity;
+  filter: drop-shadow(0 10px 18px rgba(219, 39, 119, 0.12));
+}
+
+.floating-balloon::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 92%;
+  width: 1px;
+  height: 44px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.1));
+  transform: translateX(-50%);
+}
+
+@keyframes balloon-rise {
+  0% {
+    transform: translateY(0) scale(0.92);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.78;
+  }
+  50% {
+    transform: translateY(-58vh) scale(1);
+  }
+  100% {
+    transform: translateY(-118vh) scale(0.96);
+    opacity: 0;
+  }
+}
+
+@keyframes balloon-sway {
+  0%,
+  100% {
+    margin-left: 0;
+  }
+  50% {
+    margin-left: 14px;
+  }
+}
+
+@keyframes balloon-wobble {
+  0%,
+  100% {
+    rotate: -2deg;
+  }
+  50% {
+    rotate: 2deg;
+  }
+}
+
+@keyframes butterfly-wobble {
+  0%,
+  100% {
+    rotate: -3deg;
+  }
+  50% {
+    rotate: 3deg;
+  }
+}
+
+@keyframes bubble-drift {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.05);
+  }
+}
+
+@keyframes cta-bounce {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    transform: translateY(-4px) scale(1.04);
+  }
+  70% {
+    transform: translateY(1px) scale(0.99);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes text-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(7.5);
+    opacity: 0;
+  }
+}
+
+@keyframes typing-cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* --- Confetti burst kupu-kupu khusus slide terakhir --- */
+.confetti-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.confetti-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 22px;
+  opacity: 0;
+  animation: confetti-pop 1.4s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes confetti-pop {
+  0% {
+    transform: translate(-50%, -50%) scale(0.3) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+
+.confetti-particle:nth-child(1) { --tx: 220px; --ty: -40px; --rot: 40deg; animation-delay: 0s; }
+.confetti-particle:nth-child(2) { --tx: 180px; --ty: 120px; --rot: -30deg; animation-delay: 0.03s; }
+.confetti-particle:nth-child(3) { --tx: -200px; --ty: -60px; --rot: 25deg; animation-delay: 0.06s; }
+.confetti-particle:nth-child(4) { --tx: -160px; --ty: 140px; --rot: -50deg; animation-delay: 0.09s; }
+.confetti-particle:nth-child(5) { --tx: 40px; --ty: -220px; --rot: 60deg; animation-delay: 0.12s; }
+.confetti-particle:nth-child(6) { --tx: -40px; --ty: -200px; --rot: -20deg; animation-delay: 0.15s; }
+.confetti-particle:nth-child(7) { --tx: 60px; --ty: 200px; --rot: 35deg; animation-delay: 0.05s; }
+.confetti-particle:nth-child(8) { --tx: -70px; --ty: 210px; --rot: -45deg; animation-delay: 0.08s; }
+.confetti-particle:nth-child(9) { --tx: 260px; --ty: 40px; --rot: -15deg; animation-delay: 0.11s; }
+.confetti-particle:nth-child(10) { --tx: -250px; --ty: 20px; --rot: 55deg; animation-delay: 0.14s; }
+.confetti-particle:nth-child(11) { --tx: 120px; --ty: -170px; --rot: -35deg; animation-delay: 0.02s; }
+.confetti-particle:nth-child(12) { --tx: -130px; --ty: -160px; --rot: 20deg; animation-delay: 0.17s; }
+.confetti-particle:nth-child(13) { --tx: 150px; --ty: 180px; --rot: -60deg; animation-delay: 0.07s; }
+.confetti-particle:nth-child(14) { --tx: -180px; --ty: 100px; --rot: 30deg; animation-delay: 0.13s; }
+.confetti-particle:nth-child(15) { --tx: 90px; --ty: -100px; --rot: -25deg; animation-delay: 0.1s; }
+.confetti-particle:nth-child(16) { --tx: -100px; --ty: -110px; --rot: 45deg; animation-delay: 0.16s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-panel-enter,
+  .slide-panel-exit,
+  .slide-panel-exit-fade,
+  .floating-butterfly,
+  .inner-butterfly,
+  .confetti-particle {
+    animation: none;
+  }
 }
