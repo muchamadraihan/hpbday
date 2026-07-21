@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 
 const slides = [
   "Ciieeee ...... ada yang tambah usia niehhh\nSelamat ulang tahun nyyyaaakk!",
-  "Pertama, semoga makin cakep, makin sukses, makin sehat, makin bahagia, makin banyak rezekinya, makin makinnn pokoke.",
-  "Semoga diusia sekarang dirimu bisa menjadi versi yang lebih baik dari sebelume nyak.",
-  "Semoga semua sing lagi kmu usahakan terwujud satu-satu semua yeah, dengan langkah kecil gpp\nSedikit sedikit jadi bukit wkwkwk....",
-  "Terus jangan lupa jaga kesehatan mu yuupss\nJangan begadang nek hbs pulang kerja\nMinum yang cukup\nJanlup makan e juga!.",
-  "SEMANGAATTT TERUS YAA!\n Semangat dalam semua hal ya\n Kalo capek istirahat jangan dipaksaiin\n Nek mau cerita apapun itu aku siap wkwkwk.....",
-  "udah ya aku gatau meh bilang apa lagi hehehe, INTINYA!\nSELAMAT ULANG TAHUN MIFTAKHUL JANNAH!!!.",
+  "Pertama, semoga panjang umur, makin sukses, makin sehat, makin bahagia, makin banyak rezekinya, makin cantek, makin makinnn pokoke.",
+  "Semoga diusia sekarang dirimu bisa menjadi versi yang lebih baik dari sebelume nyak",
+  "Semoga semua sing lagi kmu usahakan terwujud satu-satu semua yeah, dengan langkah kecil gpp\nSedikit sedikit jadi bukit wkwkwk",
+  "Terus jangan lupa jaga kesehatan mu yuupss\nJangan begadang nek hbs pulang kerja\nJangan menyalahkan diri sendiri\nMinum yang cukup\nJanlup makan e juga!",
+  "SEMANGAATTT TERUS YAA!\n Semangat dalam semua hal ya\n Kalo capek istirahat jangan dipaksaiin\n Nek mau cerita apapun itu aku siap wkwkwk",
+  "INTINYA!\nSELAMAT ULANG TAHUN MIFTAKHUL JANNAH!!!\nDoa baik menyertaimu",
 ];
 
 const musicSrc = "/hbd.mp3";
@@ -281,10 +281,11 @@ export default function Home() {
           </div>
 
           <p className="relative z-10 flex items-center gap-2 text-xs uppercase tracking-[0.4em] text-pink-400/80">
-            {/* <span>🦋</span> */}
-            {/* Halaman {String(activeIndex + 1).padStart(2, "0")} */}
+            <span className="inline-flex h-6 items-center rounded-full border border-pink-200/70 bg-white/70 px-3 text-[0.62rem] font-semibold tracking-[0.35em] text-pink-400 shadow-[0_8px_20px_rgba(219,39,119,0.06)] backdrop-blur-sm">
+              Untuk kamu
+            </span>
           </p>
-          <p className="relative z-10 mt-4 flex min-h-[11rem] w-full max-w-[20rem] items-center justify-center text-center handwritten-text text-[1.2rem] leading-8 tracking-normal text-[#4a2545] sm:mt-5 sm:max-w-none sm:min-h-34 sm:text-4xl sm:leading-[1.4]">
+          <p className="relative z-10 mt-4 flex min-h-[11rem] w-full max-w-[20rem] items-center justify-center text-center handwritten-text text-[1.2rem] leading-8 tracking-normal text-[#4a2545] drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] sm:mt-5 sm:max-w-none sm:min-h-34 sm:text-4xl sm:leading-[1.4]">
             {showTextPop && <span className="text-pop-halo" />}
             <span className="inline-block whitespace-pre-line">
               {typedText}
@@ -324,9 +325,10 @@ export default function Home() {
               type="button"
               onClick={handleNext}
               disabled={isAnimating}
-              className="cta-button inline-flex items-center justify-center gap-1.5 rounded-full border border-pink-200 bg-gradient-to-r from-[#f08bb5] to-[#b99cff] px-5 py-3 text-sm font-medium text-white shadow-[0_12px_28px_rgba(219,39,119,0.28)] transition duration-300 hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_16px_34px_rgba(219,39,119,0.34)] disabled:cursor-wait disabled:opacity-80"
+              className="cta-button group inline-flex items-center justify-center gap-2 rounded-full border border-white/60 bg-gradient-to-r from-[#ef7fb0] via-[#f08bb5] to-[#b99cff] px-6 py-3.5 text-sm font-semibold tracking-[0.04em] text-white shadow-[0_14px_30px_rgba(219,39,119,0.28)] ring-1 ring-white/30 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-[0_18px_38px_rgba(219,39,119,0.34)] active:scale-[0.98] disabled:cursor-wait disabled:opacity-80"
             >
-              {isLast ? "🦋 Ulangi" : "Lanjuttt"}
+              <span>{isLast ? "🦋 Ulangi" : "Lanjuttt"}</span>
+              <span className="text-[0.95em] transition-transform duration-300 group-hover:translate-x-0.5">→</span>
             </button>
           </div>
         </div>
