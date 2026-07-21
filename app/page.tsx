@@ -284,7 +284,7 @@ export default function Home() {
             {/* <span>🦋</span> */}
             {/* Halaman {String(activeIndex + 1).padStart(2, "0")} */}
           </p>
-          <p className="relative z-10 mt-4 flex min-h-[11rem] w-full max-w-[18rem] items-center justify-center text-center handwritten-text mobile-readable-text text-[1.05rem] leading-7 tracking-normal text-[#4a2545] sm:mt-5 sm:max-w-none sm:min-h-34 sm:text-4xl sm:leading-[1.4]">
+          <p className="relative z-10 mt-4 flex min-h-[11rem] w-full max-w-[20rem] items-center justify-center text-center handwritten-text text-[1.2rem] leading-8 tracking-normal text-[#4a2545] sm:mt-5 sm:max-w-none sm:min-h-34 sm:text-4xl sm:leading-[1.4]">
             {showTextPop && <span className="text-pop-halo" />}
             <span className="inline-block whitespace-pre-line">
               {typedText}

@@ -47,10 +47,6 @@ body {
   font-weight: 700;
 }
 
-.mobile-readable-text {
-  text-wrap: balance;
-}
-
 .panel-bubble {
   position: absolute;
   border-radius: 9999px;
