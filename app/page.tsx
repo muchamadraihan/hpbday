@@ -61,9 +61,11 @@ export default function Home() {
   const [showTextPop, setShowTextPop] = useState(false);
   const [showOutro, setShowOutro] = useState(false);
   const [showOutroConfetti, setShowOutroConfetti] = useState(false);
+  const [isCakeBlownOut, setIsCakeBlownOut] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const hasStartedMusicRef = useRef(false);
   const outroTimersRef = useRef<number[]>([]);
+  const cakeResetTimerRef = useRef<number | null>(null);
 
   const isLast = activeIndex === slides.length - 1;
 
@@ -72,6 +74,13 @@ export default function Home() {
       window.clearTimeout(timerId);
     });
     outroTimersRef.current = [];
+  };
+
+  const clearCakeResetTimer = () => {
+    if (cakeResetTimerRef.current !== null) {
+      window.clearTimeout(cakeResetTimerRef.current);
+      cakeResetTimerRef.current = null;
+    }
   };
 
   useEffect(() => {
@@ -113,6 +122,7 @@ export default function Home() {
   useEffect(() => {
     return () => {
       clearOutroTimers();
+      clearCakeResetTimer();
     };
   }, []);
 
@@ -147,11 +157,13 @@ export default function Home() {
     void startMusic();
 
     clearOutroTimers();
+    clearCakeResetTimer();
 
     if (isLast) {
       setShowOutro(true);
       setShowConfetti(false);
       setShowOutroConfetti(false);
+      setIsCakeBlownOut(false);
 
       const confettiTimer = window.setTimeout(() => {
         setShowOutroConfetti(true);
@@ -161,13 +173,7 @@ export default function Home() {
         setShowOutroConfetti(false);
       }, 2400);
 
-      const resetTimer = window.setTimeout(() => {
-        setActiveIndex(0);
-        setShowOutro(false);
-        setShowOutroConfetti(false);
-      }, 11000);
-
-      outroTimersRef.current = [confettiTimer, confettiHideTimer, resetTimer];
+      outroTimersRef.current = [confettiTimer, confettiHideTimer];
       return;
     }
 
@@ -180,6 +186,24 @@ export default function Home() {
       setActiveIndex((value) => value + 1);
       setIsAnimating(false);
     }, 320);
+  };
+
+  const handleCakeClick = () => {
+    if (!showOutro || isCakeBlownOut) {
+      return;
+    }
+
+    clearCakeResetTimer();
+    setShowOutroConfetti(false);
+    setIsCakeBlownOut(true);
+
+    cakeResetTimerRef.current = window.setTimeout(() => {
+      setActiveIndex(0);
+      setShowOutro(false);
+      setShowOutroConfetti(false);
+      setIsCakeBlownOut(false);
+      cakeResetTimerRef.current = null;
+    }, 6500);
   };
 
   return (
@@ -347,19 +371,67 @@ export default function Home() {
           </div> */}
 
           <div className="relative z-10 mt-6 flex w-full items-center justify-center gap-4 sm:mt-8 sm:justify-end">
-            {/* <p className="text-sm text-pink-400/70">
-              {activeIndex + 1} dari {slides.length}
-            </p> */}
-            <button
-              type="button"
-              onClick={handleNext}
-              disabled={isAnimating}
-              className="cta-button group inline-flex items-center justify-center gap-2 rounded-full border border-white/60 bg-gradient-to-r from-[#ef7fb0] via-[#f08bb5] to-[#b99cff] px-6 py-3.5 text-sm font-semibold tracking-[0.04em] text-white shadow-[0_14px_30px_rgba(219,39,119,0.28)] ring-1 ring-white/30 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-[0_18px_38px_rgba(219,39,119,0.34)] active:scale-[0.98] disabled:cursor-wait disabled:opacity-80"
-              aria-label={isLast ? "Lihat foto terakhir" : "Lanjut ke slide berikutnya"}
-            >
-              <span>Lanjuttt</span>
-              <span className="text-[0.95em] transition-transform duration-300 group-hover:translate-x-0.5">→</span>
-            </button>
+            {showOutro ? (
+              <div className="cake-stage relative z-10 mt-4 flex w-full max-w-[20rem] flex-col items-center gap-3 sm:mt-5 sm:max-w-none">
+                <div className="cake-copy text-center">
+                  <p className="cake-prompt">
+                    {isCakeBlownOut ? "Wish terkirim" : "Saatnya make a wish"}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleCakeClick}
+                  disabled={isCakeBlownOut}
+                  className="cake-button group inline-flex items-center justify-center rounded-[2rem] border border-white/70 bg-transparent px-2 py-1.5 shadow-[0_18px_38px_rgba(219,39,119,0.16)] ring-1 ring-white/30 transition duration-300 hover:-translate-y-0.5 hover:scale-[1.01] active:scale-[0.98] disabled:cursor-wait disabled:opacity-100"
+                  aria-label={isCakeBlownOut ? "Kuenya sudah ditiup" : "Klik kue untuk mematikan lilin"}
+                >
+                  <span className="sr-only">
+                    {isCakeBlownOut ? "Saatnya make a wish" : "Klik lilinnya"}
+                  </span>
+                  <span className={`cake-plate ${isCakeBlownOut ? "is-blown" : ""}`}>
+                    <span className="cake-plate-rim" />
+                    <span className="cake-layer cake-layer-top" />
+                    <span className="cake-layer cake-layer-middle" />
+                    <span className="cake-layer cake-layer-bottom" />
+                    <span className="cake-icing" />
+                    <span className="cake-drip cake-drip-one" />
+                    <span className="cake-drip cake-drip-two" />
+                    <span className="cake-drip cake-drip-three" />
+                    <span className="cake-candle cake-candle-one">
+                      <span className="cake-wick" />
+                      <span className="cake-flame" />
+                      <span className="cake-smoke cake-smoke-one" />
+                    </span>
+                    <span className="cake-candle cake-candle-two">
+                      <span className="cake-wick" />
+                      <span className="cake-flame" />
+                      <span className="cake-smoke cake-smoke-two" />
+                    </span>
+                    <span className="cake-candle cake-candle-three">
+                      <span className="cake-wick" />
+                      <span className="cake-flame" />
+                      <span className="cake-smoke cake-smoke-three" />
+                    </span>
+                  </span>
+                </button>
+                <p className="cake-message">
+                  {isCakeBlownOut
+                    ? "Semoga terkabul yaa, aamiinn."
+                    : "Klik lilinnya kalau udah make a wish."}
+                </p>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={isAnimating}
+                className="cta-button group inline-flex items-center justify-center gap-2 rounded-full border border-white/60 bg-gradient-to-r from-[#ef7fb0] via-[#f08bb5] to-[#b99cff] px-6 py-3.5 text-sm font-semibold tracking-[0.04em] text-white shadow-[0_14px_30px_rgba(219,39,119,0.28)] ring-1 ring-white/30 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-[0_18px_38px_rgba(219,39,119,0.34)] active:scale-[0.98] disabled:cursor-wait disabled:opacity-80"
+                aria-label={isLast ? "Lihat foto terakhir" : "Lanjut ke slide berikutnya"}
+              >
+                <span>Lanjuttt</span>
+                <span className="text-[0.95em] transition-transform duration-300 group-hover:translate-x-0.5">→</span>
+              </button>
+            )}
           </div>
         </div>
       </section>
