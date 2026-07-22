@@ -6,10 +6,10 @@ const slides = [
   "Ciieeee ...... ada yang tambah usia niehhh\nSelamat ulang tahun nyyyaaakk!",
   "Pertama, semoga panjang umur, makin sukses, makin sehat, makin bahagia, makin banyak rezekinya, makin cantek, makin makinnn pokoke.",
   "Semoga diusia sekarang dirimu bisa menjadi versi yang lebih baik dari sebelume nyak",
-  "Semoga semua sing lagi kmu usahakan terwujud satu-satu semua yeah, dengan langkah kecil gpp\nSedikit sedikit jadi bukit wkwkwk",
+  "Semoga semua sing lagi kamu usahakan terwujud satu-satu semua yeah, dengan langkah kecil gpp\nSedikit sedikit jadi bukit wkwkwk",
   "Terus jangan lupa jaga kesehatan mu yuupss\nJangan begadang nek hbs pulang kerja\nJangan menyalahkan diri sendiri\nMinum yang cukup\nJanlup makan e juga!",
   "SEMANGAATTT TERUS YAA!\n Semangat dalam semua hal ya\n Kalo capek istirahat jangan dipaksaiin\n Nek mau cerita apapun itu aku siap wkwkwk",
-  "INTINYA!\nSELAMAT ULANG TAHUN MIFTAKHUL JANNAH!!!\nDoa baik menyertaimu",
+  "Dan yang terakhir, semoga dihari ulang tahun mu ini kamu bisa senyum-senyum sendiri wkwkwk\nSemoga bahagia selalu nnyaaakkk",
 ];
 
 const musicSrc = "/hbd.mp3";
@@ -59,10 +59,20 @@ export default function Home() {
   const [direction, setDirection] = useState<"next" | "restart">("next");
   const [showConfetti, setShowConfetti] = useState(false);
   const [showTextPop, setShowTextPop] = useState(false);
+  const [showOutro, setShowOutro] = useState(false);
+  const [showOutroConfetti, setShowOutroConfetti] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const hasStartedMusicRef = useRef(false);
+  const outroTimersRef = useRef<number[]>([]);
 
   const isLast = activeIndex === slides.length - 1;
+
+  const clearOutroTimers = () => {
+    outroTimersRef.current.forEach((timerId) => {
+      window.clearTimeout(timerId);
+    });
+    outroTimersRef.current = [];
+  };
 
   useEffect(() => {
     let index = 0;
@@ -91,47 +101,24 @@ export default function Home() {
 
   // Trigger confetti tepat setelah animasi ketik selesai di slide terakhir
   useEffect(() => {
-    if (!isLast) {
-      setShowConfetti(false);
-      return;
+    setShowConfetti(false);
+  }, [isLast, activeIndex, showOutro]);
+
+  useEffect(() => {
+    if (!showOutro) {
+      setShowOutroConfetti(false);
     }
-
-    const text = slides[activeIndex];
-    const typingDuration = text.length * 32 + 260;
-
-    const showTimer = window.setTimeout(() => {
-      setShowConfetti(true);
-    }, typingDuration);
-
-    const hideTimer = window.setTimeout(() => {
-      setShowConfetti(false);
-    }, typingDuration + 1400);
-
-    return () => {
-      window.clearTimeout(showTimer);
-      window.clearTimeout(hideTimer);
-    };
-  }, [isLast, activeIndex]);
+  }, [showOutro]);
 
   useEffect(() => {
     return () => {
-      audioRef.current?.pause();
+      clearOutroTimers();
     };
   }, []);
 
   useEffect(() => {
-    void startMusic();
-
-    const retryMusic = () => {
-      void startMusic();
-    };
-
-    window.addEventListener("pointerdown", retryMusic, { once: true });
-    window.addEventListener("keydown", retryMusic, { once: true });
-
     return () => {
-      window.removeEventListener("pointerdown", retryMusic);
-      window.removeEventListener("keydown", retryMusic);
+      audioRef.current?.pause();
     };
   }, []);
 
@@ -159,16 +146,35 @@ export default function Home() {
   const handleNext = () => {
     void startMusic();
 
-    setIsAnimating(true);
-    setDirection(isLast ? "restart" : "next");
+    clearOutroTimers();
 
     if (isLast) {
-      window.setTimeout(() => {
+      setShowOutro(true);
+      setShowConfetti(false);
+      setShowOutroConfetti(false);
+
+      const confettiTimer = window.setTimeout(() => {
+        setShowOutroConfetti(true);
+      }, 650);
+
+      const confettiHideTimer = window.setTimeout(() => {
+        setShowOutroConfetti(false);
+      }, 2400);
+
+      const resetTimer = window.setTimeout(() => {
         setActiveIndex(0);
-        setIsAnimating(false);
-      }, 320);
+        setShowOutro(false);
+        setShowOutroConfetti(false);
+      }, 11000);
+
+      outroTimersRef.current = [confettiTimer, confettiHideTimer, resetTimer];
       return;
     }
+
+    setShowOutro(false);
+    setShowOutroConfetti(false);
+    setIsAnimating(true);
+    setDirection("next");
 
     window.setTimeout(() => {
       setActiveIndex((value) => value + 1);
@@ -253,11 +259,13 @@ export default function Home() {
         <div
           key={activeIndex}
           className={`slide-panel relative flex w-full flex-col items-center overflow-hidden rounded-3xl border border-pink-100/70 bg-white/88 p-5 text-center shadow-[0_18px_50px_rgba(219,39,119,0.09)] backdrop-blur-sm sm:p-10 sm:text-left ${
-            isAnimating
-              ? direction === "restart"
-                ? "slide-panel-exit-fade"
-                : "slide-panel-exit"
-              : "slide-panel-enter"
+            showOutro
+              ? "slide-panel-outro"
+              : isAnimating
+                ? direction === "restart"
+                  ? "slide-panel-exit-fade"
+                  : "slide-panel-exit"
+                : "slide-panel-enter"
           }`}
         >
           {/* Kupu-kupu dekoratif di belakang teks, di dalam panel */}
@@ -285,15 +293,36 @@ export default function Home() {
               Untuk kamu
             </span>
           </p>
-          <p className="relative z-10 mt-4 flex min-h-[11rem] w-full max-w-[20rem] items-center justify-center text-center handwritten-text text-[1.2rem] leading-8 tracking-normal text-[#4a2545] drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] sm:mt-5 sm:max-w-none sm:min-h-34 sm:text-4xl sm:leading-[1.4]">
-            {showTextPop && <span className="text-pop-halo" />}
-            <span className="inline-block whitespace-pre-line">
-              {typedText}
-              <span className="typing-cursor ml-1 inline-block h-[0.9em] w-0.5 translate-y-1 bg-pink-400 align-text-bottom" aria-hidden="true" />
-            </span>
-          </p>
+          {showOutro ? (
+            <div className="outro-stage relative z-10 mt-4 flex min-h-[11rem] w-full max-w-[20rem] items-center justify-center sm:mt-5 sm:max-w-none sm:min-h-34">
+              <div className="outro-stack">
+                <p className="outro-heading">
+                  SELAMAT ULANG TAHUN MIFTAKHUL JANNAH!
+                </p>
+                <div className="photo-card">
+                  <div className="photo-preview">
+                    <img className="photo-image" src="/foto.png" alt="Foto kenangan terakhir" />
+                    <span className="photo-glow photo-glow-one" />
+                    <span className="photo-glow photo-glow-two" />
+                    <span className="photo-glow photo-glow-three" />
+                    <div className="photo-heart photo-heart-one">♥</div>
+                    <div className="photo-heart photo-heart-two">♥</div>
+                  </div>
+                  <p className="photo-caption">Doa baik menyertaimu</p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="relative z-10 mt-4 flex min-h-[11rem] w-full max-w-[20rem] items-center justify-center text-center handwritten-text text-[1.2rem] leading-8 tracking-normal text-[#4a2545] drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] sm:mt-5 sm:max-w-none sm:min-h-34 sm:text-4xl sm:leading-[1.4]">
+              {showTextPop && <span className="text-pop-halo" />}
+              <span className="inline-block whitespace-pre-line">
+                {typedText}
+                <span className="typing-cursor ml-1 inline-block h-[0.9em] w-0.5 translate-y-1 bg-pink-400 align-text-bottom" aria-hidden="true" />
+              </span>
+            </p>
+          )}
 
-          {showConfetti && (
+          {showOutroConfetti && (
             <div className="confetti-burst z-20">
               {Array.from({ length: 16 }).map((_, i) => (
                 <span key={i} className="confetti-particle">
@@ -326,8 +355,9 @@ export default function Home() {
               onClick={handleNext}
               disabled={isAnimating}
               className="cta-button group inline-flex items-center justify-center gap-2 rounded-full border border-white/60 bg-gradient-to-r from-[#ef7fb0] via-[#f08bb5] to-[#b99cff] px-6 py-3.5 text-sm font-semibold tracking-[0.04em] text-white shadow-[0_14px_30px_rgba(219,39,119,0.28)] ring-1 ring-white/30 backdrop-blur-sm transition duration-300 hover:-translate-y-0.5 hover:scale-[1.03] hover:shadow-[0_18px_38px_rgba(219,39,119,0.34)] active:scale-[0.98] disabled:cursor-wait disabled:opacity-80"
+              aria-label={isLast ? "Lihat foto terakhir" : "Lanjut ke slide berikutnya"}
             >
-              <span>{isLast ? "🦋 Ulangi" : "Lanjuttt"}</span>
+              <span>Lanjuttt</span>
               <span className="text-[0.95em] transition-transform duration-300 group-hover:translate-x-0.5">→</span>
             </button>
           </div>
