@@ -9,7 +9,7 @@ const slides = [
   "Semoga semua sing lagi kamu usahakan terwujud satu-satu semua yeah, dengan langkah kecil gpp\nSedikit sedikit jadi bukit wkwkwk",
   "Terus jangan lupa jaga kesehatan mu yuupss\nJangan begadang nek hbs pulang kerja\nJangan menyalahkan diri sendiri\nMinum yang cukup\nJanlup makan e juga!",
   "SEMANGAATTT TERUS YAA!\n Semangat dalam semua hal ya\n Kalo capek istirahat jangan dipaksaiin\n Nek mau cerita apapun itu aku siap wkwkwk",
-  "Dan yang terakhir, semoga dihari ulang tahun mu ini kamu bisa senyum-senyum sendiri wkwkwk\nSemoga bahagia selalu nnyaaakkk",
+  "Dan yang terakhir, semoga dihari ulang tahun mu ini kamu bisa senyum-senyum sendiri wkwkwk\nSemoga bahagia selalu nnyaaakkk\nSemoga suka ya sama gift nya hehehe",
 ];
 
 const musicSrc = "/hbd.mp3";
@@ -429,7 +429,7 @@ export default function Home() {
                 aria-label={isLast ? "Lihat foto terakhir" : "Lanjut ke slide berikutnya"}
               >
                 <span>Lanjuttt</span>
-                <span className="text-[0.95em] transition-transform duration-300 group-hover:translate-x-0.5">→</span>
+                {/* <span className="text-[0.95em] transition-transform duration-300 group-hover:translate-x-0.5"></span> */}
               </button>
             )}
           </div>

@@ -297,7 +297,8 @@ body {
 .cake-button {
   width: min(17rem, 100%);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  padding: 1.1rem 0.75rem 0.45rem;
 }
 
 .cake-stage {
@@ -341,7 +342,7 @@ body {
   position: relative;
   display: block;
   width: 100%;
-  height: 9.25rem;
+  height: 10.25rem;
   transform-origin: center bottom;
   transition: transform 220ms ease, filter 220ms ease;
 }
