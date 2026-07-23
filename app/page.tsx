@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 
 const slides = [
   "Ciieeee ...... ada yang tambah usia niehhh\nSelamat ulang tahun nyyyaaakk!",
-  "Pertama, semoga panjang umur,sehat selalau, makin sukses, makin sehat, makin bahagia, makin banyak rezekinya, makin cantek, makin makinnn pokoke.",
+  "Pertama, semoga panjang umur,sehat selalau, makin sukses, makin lucu, makin bahagia, makin banyak rezekinya, makin cantek, makin makinnn pokoke.",
   "Semoga diusia sekarang dirimu bisa menjadi versi yang lebih baik dari sebelume nyak",
-  "Semoga semua yang lagi kamu usahakan terwujud satu-satu semua yaaa\ndoa baik ku menyertai langkahmu selalu\nKalau rencana mu tidak berjalan mulus, it's okayy\n Kamu tetap hebat bisa sampai di titik sekarang",
+  "Semoga semua yang lagi kamu usahakan terwujud satu-satu semua yaaa.\nDoa baik ku menyertai langkahmu selalu.\nKalau rencana mu tidak berjalan mulus, it's okayy\n Kamu tetap hebat bisa sampai di titik sekarang.",
   "Terus jangan lupa jaga kesehatan mu yuupss\nJangan begadang nek hbs pulang kerja\nJangan menyalahkan diri sendiri\nMinum yang cukup\nJanlup makan e juga!",
-  "SEMANGAATTT TERUS YAA!\n Kalo capek istirahat jangan dipaksaiin\nKamu boleh kok jadiin aku tempat cerita\nI will always for u bcs u're the only good thing in my life, and I will always be for u too.",
-  "Dan yang terakhir, semoga dihari ulang tahun mu ini kamu bahagia selalu nnyaaakkk\nSemoga suka ya sama gift nya hehehe",
+  "SEMANGAATTT TERUS YAA!\n Kalo capek istirahat, jangan dipaksaiin\nKamu boleh kok jadiin aku tempat cerita\nI will always for u bcs u're the only good thing in my life.",
+  "Dan yang terakhir, semoga dihari ulang tahun mu ini kamu bahagia selalu nnyaaakkk\n aku dah nggatau mau bilang apa lagi hehe, aku berdoa semoga segala hal baik menyertaimu.\nSemoga suka ya sama gift nyaa, dan aku bikin ini spesial buat orang yang spesial juga.",
 ];
 
 const musicSrc = "/hbd.mp3";
